@@ -22,9 +22,8 @@ if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get
 }
 
 add_action('admin_menu', 'register_full_order_exporters_menu');
-
 function register_full_order_exporters_menu() {
-	add_submenu_page('woocommerce', 'Full Orders Exporter', 'Full Export Orders', 'view_woocommerce_reports', 'full-orders-exporters', 'full_order_exporters_page');
+	$hook_name = add_submenu_page('woocommerce', 'Full Orders Exporter', 'Full Export Orders', 'view_woocommerce_reports', 'full-orders-exporters', 'full_order_exporters_page');
 	function full_order_exporters_page() {
 		// check user capabilities
 		if (!current_user_can('view_woocommerce_reports')) {
@@ -38,5 +37,11 @@ function register_full_order_exporters_menu() {
 			</form>
 		</div>
 		<?php
+	}
+
+	add_action( 'load-' . $hook_name, 'full_order_exporters_page_submit' );
+	function full_order_exporters_page_submit() {
+		$logger = wc_get_logger();
+		$logger->debug('Export request received');
 	}
 }
