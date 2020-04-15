@@ -16,13 +16,15 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+	// WooCommerce is not available.
+	exit;
+}
+
 add_action('admin_menu', 'register_full_order_exporters_menu');
 
 function register_full_order_exporters_menu() {
-	if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-		add_submenu_page('woocommerce', 'Full Orders Exporter', 'Full Export Orders', 'view_woocommerce_reports', 'full-orders-exporters', 'full_order_exporters_page');
-	}
-
+	add_submenu_page('woocommerce', 'Full Orders Exporter', 'Full Export Orders', 'view_woocommerce_reports', 'full-orders-exporters', 'full_order_exporters_page');
 	function full_order_exporters_page() {
 		// check user capabilities
 		if (!current_user_can('view_woocommerce_reports')) {
