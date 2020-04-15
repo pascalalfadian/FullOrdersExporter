@@ -42,6 +42,10 @@ function register_full_order_exporters_menu() {
 	add_action( 'load-' . $hook_name, 'full_order_exporters_page_submit' );
 	function full_order_exporters_page_submit() {
 		$logger = wc_get_logger();
-		$logger->debug('Export request received');
+		$logger->info('Export request received');
+		$orders = wc_get_orders([]);
+		foreach ($orders as $order) {
+			$logger->debug('Order #' . $order->get_order_number() . ': ' . json_encode($order->get_data()));
+		}
 	}
 }
