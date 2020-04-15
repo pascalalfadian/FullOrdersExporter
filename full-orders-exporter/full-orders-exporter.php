@@ -31,7 +31,9 @@ function register_full_order_exporters_menu() {
 		?>
 		<div class="wrap">
 			<h1><?= esc_html(get_admin_page_title()); ?></h1>
-			<p>The quick brown fox jumps over the lazy dog.</p>
+			<form action="<?php menu_page_url('full-orders-exporters') ?>" method="post">
+				<button type="submit" class="button">Export Now</button>
+			</form>
 		</div>
 		<?php
 	}
