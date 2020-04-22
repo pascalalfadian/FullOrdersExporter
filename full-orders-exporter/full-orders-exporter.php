@@ -47,10 +47,46 @@ function register_full_order_exporters_menu() {
 			$orders = wc_get_orders([]);
 			header('Content-type: text/csv');
 			$fp = fopen('php://output', 'w');
-			fputcsv($fp, ['id']);
+			fputcsv($fp, [
+				'Order ID',
+				'Order Status',
+				'Order Date',
+				'Customer Note',
+				'Teacher Name',
+				'School Name',
+				'Address',
+				'City',
+				'State Code',
+				'Postal Code',
+				'Country Code',
+				'Teacher E-mail',
+				'Teacher Phone Number',
+				'Payment Method',
+				'Nama Siswa (Anggota 1)',
+				'Nama Siswa (Anggota 2)'
+			]);
 			foreach ($orders as $order) {
-				$logger->debug('Order #' . $order->get_order_number() . ': ' . json_encode($order->get_data()));
-				fputcsv($fp, [$order->get_id()]);
+				$items = $order->get_items();
+				foreach ($items as $item) {
+					fputcsv($fp, [
+						$order->get_id(),
+						$order->get_status(),
+						$order->get_date_created(),
+						$order->get_customer_note(),
+						$order->get_formatted_billing_full_name(),
+						$order->get_billing_company(),
+						$order->get_billing_address_1() . ' ' . $order->get_billing_address_2(),
+						$order->get_billing_city(),
+						$order->get_billing_state(),
+						$order->get_billing_postcode(),
+						$order->get_billing_country(),
+						$order->get_billing_email(),
+						$order->get_billing_phone(),
+						$order->get_payment_method_title(),
+						$item->get_meta('Nama Siswa (Anggota 1)'),
+						$item->get_meta('Nama Siswa (Anggota 2)')
+					]);
+				}
 			}
 			fclose($fp);
 			exit();
