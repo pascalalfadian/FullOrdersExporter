@@ -45,9 +45,15 @@ function register_full_order_exporters_menu() {
 			$logger = wc_get_logger();
 			$logger->info('Export request received');
 			$orders = wc_get_orders([]);
+			header('Content-type: text/csv');
+			$fp = fopen('php://output', 'w');
+			fputcsv($fp, ['id']);
 			foreach ($orders as $order) {
 				$logger->debug('Order #' . $order->get_order_number() . ': ' . json_encode($order->get_data()));
+				fputcsv($fp, [$order->get_id()]);
 			}
+			fclose($fp);
+			exit();
 		}
 	}
 }
