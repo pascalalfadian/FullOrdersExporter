@@ -29,12 +29,24 @@ function register_full_order_exporters_menu() {
 		if (!current_user_can('view_woocommerce_reports')) {
 			return;
 		}
+		$orders = wc_get_orders([]);
+		$meta_keys = [];
+		foreach ($orders as $order) {
+			foreach ($order->get_items() as $item) {
+				foreach ($item->get_meta_data() as $meta_data) {
+					$meta_keys[$meta_data->key] = TRUE;
+				}
+			}
+		}
 		?>
 		<div class="wrap">
 			<h1><?= esc_html(get_admin_page_title()); ?></h1>
 			<form action="<?php menu_page_url('full-orders-exporters') ?>" method="post">
 				<button type="submit" class="button">Export Now</button>
 			</form>
+			<code>
+				DEBUG: <?= htmlspecialchars(json_encode($meta_keys)) ?>
+			</code>
 		</div>
 		<?php
 	}
